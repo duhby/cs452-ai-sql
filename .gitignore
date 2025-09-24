@@ -1,1 +1,8 @@
 .env
+.devenv
+.devenv.flake.nix
+
+
+# Added by cargo
+
+/target
