@@ -84,7 +84,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     .map(|q| q.to_string())
     .collect::<Vec<_>>();
 
-    for question in questions.iter() {
+    for question in &questions {
         println!("---\nQuestion: {}", question);
         let request = get_request(&[system_message.clone(), get_user_message(question)?])?;
 
