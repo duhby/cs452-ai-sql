@@ -1,0 +1,56 @@
+Connecting to database at postgresql:///postgres?user=josh
+Applying database migrations
+---
+Question: How many users are in the database?
+Query: SELECT COUNT(*) FROM member;
+
+DB Response: [PgRow {count: 5}]
+Answer: There are 5 users in the database.
+---
+Question: How many files does each member have?
+Query: SELECT member, COUNT(*) AS file_count
+FROM file
+GROUP BY member;
+
+DB Response: [PgRow {member: "m5", file_count: 1}, PgRow {member: "m3", file_count: 1}, PgRow {member: "m1", file_count: 1}, PgRow {member: "m2", file_count: 1}, PgRow {member: "m4", file_count: 1}]
+Answer: Each member has 1 file.
+---
+Question: What is the most common file type?
+Query: SELECT type_::text
+FROM file
+GROUP BY type_
+ORDER BY COUNT(*) DESC
+LIMIT 1;
+
+DB Response: [PgRow {type_: "image/png"}]
+Answer: The most common file type is image/png.
+---
+Question: Who has uploaded the most files?
+Query: SELECT member, COUNT(*) AS file_count
+FROM file
+GROUP BY member
+ORDER BY file_count DESC
+LIMIT 1;
+
+DB Response: [PgRow {member: "m5", file_count: 1}]
+Answer: The member who has uploaded the most files is m5 with 1 file.
+---
+Question: Which tags have no children?
+Query: SELECT name FROM tag
+WHERE name NOT IN (SELECT parent FROM tag_parent);
+
+DB Response: [PgRow {name: "meme"}, PgRow {name: "clip"}, PgRow {name: "cat"}]
+Answer: The tags that have no children are "meme", "clip", and "cat".
+---
+Question: Which members have at least one file with more than one tag?
+Query: SELECT DISTINCT member
+FROM file
+WHERE id IN (
+    SELECT file
+    FROM file_tag
+    GROUP BY file
+    HAVING COUNT(tag) > 1
+);
+
+DB Response: [PgRow {member: "m1"}]
+Answer: The member "m1" has at least one file with more than one tag.

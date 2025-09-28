@@ -4,4 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+async-openai = "0.29.3"
+dotenvy = "0.15.7"
+regex = "1.11.3"
 sqlx = { version = "0.8", features = [ "postgres", "runtime-tokio-rustls", "time", "macros" ] }
+tokio = { version = "1.47", features = [ "rt-multi-thread" ] }
